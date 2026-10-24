@@ -112,7 +112,7 @@ const tag=s=>esc(s).replace(/#(\w+)/g,'<span class="tg">#$1</span>');
 
 // Starter demo community: fictional accounts, posts, profile photos and engagement.
 function seedDemoCommunity(){
- if(S.demoSeed)return;
+ if(S.demoSeed>=2)return;
  const people=[
   ["mira.jpg","little moments, big skies ☁️","https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=240&h=240&fit=crop&crop=faces",824,391],
   ["kai.frames","street photos + late night walks 📷","https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=240&h=240&fit=crop&crop=faces",1250,602],
@@ -164,7 +164,7 @@ function seedDemoCommunity(){
    i===5?[{u:"luna.jpg",t:"the colors!!"}]:[{u:"pixel.park",t:"needed this today"}]
   );
  });
- S.demoSeed=1;save();
+ S.demoSeed=2;save();
 }
 seedDemoCommunity();
 
@@ -248,7 +248,7 @@ rep2:()=>toast("Thanks — this is a demo"),lo:()=>toast("Demo only — there is
 more:()=>pop("more"),meta:()=>pop("meta"),sw:()=>{$("#pop").className="";swDlg()},swto(e){S.me=e.dataset.id;cur=null;save();ACT.x();render()},
 addacc(){const n=clean(val("na"));if(!n)return;A(n);S.me=n;save();ACT.x();render()},
 share2(){const u=clean(val("pa"))||S.me,f=pend;if(!f)return;A(u);const id="p"+uid();mput(id,f).then(ok=>{S.posts.unshift({id,u,cap:val("pc"),type:f.type.startsWith("video")?"video":"image",mid:id,ts:Date.now()});save();ACT.x();if(!ok)toast("Posted for this session only — browser storage unavailable");else toast("Post shared as "+u);v="home";render()})}};
-function openStory(u){const candidates=posts(u);if(!candidates.length)return ACT.user({dataset:{id:u}});const p=candidates[0];const content=p.type==="video"?media(p,0):media(p,0);D("Story",`<div class="story-view"><div class="story-top">${av(u,36)}<b>${esc(u)}</b><span style="opacity:.75">${ago(p.ts)}</span><button style="margin-left:auto" data-a="x">✕</button></div>${content}<div class="story-track">♫  ${esc(p.music||"Original audio · "+u)}<br><small>Music sticker · demo track</small></div></div><div style="display:flex;gap:10px;padding:12px"><button class="gb" data-a="storyprev" data-id="${u}">‹ Previous</button><button class="gb" data-a="storynext" data-id="${u}">Next ›</button><button class="gb" data-a="storylike" data-id="${p.id}">♡ Like</button></div>`,"big");}
+function openStory(u){const candidates=posts(u);if(!candidates.length)return ACT.user({dataset:{id:u}});const p=candidates.find(x=>x.id===storyCurrent)||candidates[0];storyCurrent=p.id;const content=p.type==="video"?media(p,0):media(p,0);D("Story",`<div class="story-view"><div class="story-top">${av(u,36)}<b>${esc(u)}</b><span style="opacity:.75">${ago(p.ts)}</span><button style="margin-left:auto" data-a="x">✕</button></div>${content}<div class="story-track">♫  ${esc(p.music||"Original audio · "+u)}<br><small>Music sticker · demo track</small></div></div><div style="display:flex;gap:10px;padding:12px"><button class="gb" data-a="storyprev" data-id="${u}">‹ Previous</button><button class="gb" data-a="storynext" data-id="${u}">Next ›</button><button class="gb" data-a="storylike" data-id="${p.id}">♡ Like</button></div>`,"big");}
 function storyMove(u,dir){const list=posts(u),idx=Math.max(0,list.findIndex(p=>p.id===storyCurrent));const next=list[(idx+dir+list.length)%list.length];if(next){storyCurrent=next.id;openStory(u)}}
 let storyCurrent=null;
 function postDlg(id){const p=S.posts.find(x=>x.id==id);if(p)D(esc(p.u),card(p,1))}
