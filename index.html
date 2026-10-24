@@ -112,61 +112,15 @@ const tag=s=>esc(s).replace(/#(\w+)/g,'<span class="tg">#$1</span>');
 
 // Starter demo community: fictional accounts, posts, profile photos and engagement.
 function seedDemoCommunity(){
- if(S.demoSeed>=2)return;
- const people=[
-  ["mira.jpg","little moments, big skies ☁️","https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=240&h=240&fit=crop&crop=faces",824,391],
-  ["kai.frames","street photos + late night walks 📷","https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=240&h=240&fit=crop&crop=faces",1250,602],
-  ["noah.afterhours","coffee, music, repeat.","https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=240&h=240&fit=crop&crop=faces",562,430],
-  ["luna.jpg","collecting tiny happy things 🌷","https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=240&h=240&fit=crop&crop=faces",2100,714],
-  ["pixel.park","games • design • random thoughts","https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=240&h=240&fit=crop&crop=faces",947,288],
-  ["sora.wav","somewhere between songs 🎧","https://images.unsplash.com/photo-1517841905240-472988babdf9?w=240&h=240&fit=crop&crop=faces",1730,821],
-  ["amber.days","film photos & rainy windows ☔","https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=240&h=240&fit=crop&crop=faces",638,219],
-  ["juniper.mp3","songs for the walk home 🎧","https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=240&h=240&fit=crop&crop=faces",1420,507],
-  ["orbit.notes","tiny thoughts from a big universe 🌙","https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=240&h=240&fit=crop&crop=faces",982,336],
-  ["mossy.jpg","outside whenever possible 🌿","https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=240&h=240&fit=crop&crop=faces",751,190],
-  ["cloud.zip","digital mess / good intentions","https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=240&h=240&fit=crop&crop=faces",2204,681],
-  ["afterglow.fm","currently listening to everything","https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=240&h=240&fit=crop&crop=faces",1155,408],
-  ["daybreak.jpg","slow mornings, loud playlists","https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=240&h=240&fit=crop&crop=faces",867,255],
-  ["bluehour.png","the sky did all the work 💙","https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=240&h=240&fit=crop&crop=faces",1733,739],
-  ["softstatic","low battery, high hopes","https://images.unsplash.com/photo-1517841905240-472988babdf9?w=240&h=240&fit=crop&crop=faces",539,162],
-  ["fai.reconstruction","FAI · AI reconstruction, not the real person","https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=240&h=240&fit=crop&crop=faces",0,0]
- ];
- people.forEach(([u,bio,photo,fl,fg])=>{const a=A(u);a.bio=bio;a.av=photo;a.fl=fl;a.fg=fg;});
- const now=Date.now();
- const samples=[
-  ["mira.jpg","golden hour never misses 🌅 #evening #littlethings","photo-1470252649378-9c29740c9fa8",4],
-  ["kai.frames","found a quiet street and stayed way too long. #streetphotography","photo-1519608487953-e999c86e7455",3],
-  ["noah.afterhours","coffee first. decisions later ☕","photo-1495474472287-4d71bcdd2085",2],
-  ["luna.jpg","a little color for your feed 🌸 #weekend","photo-1490750967868-88aa4486c946",1],
-  ["pixel.park","setup is finally clean. now to actually finish the project 🎮","photo-1498050108023-c5249f4df085",0],
-  ["sora.wav","this sky feels like the last scene of a movie 🌊","photo-1500375592092-40eb2168fd21",5],
-  ["mira.jpg","tiny reminder: you don't have to have it all figured out.","photo-1500530855697-b586d89ba3ee",6],
-  ["amber.days","rain on the train window again 🌧️","photo-1519608487953-e999c86e7455",2],
-  ["juniper.mp3","found a song that sounds like summer","photo-1493225457124-a3eb161ffa5f",3],
-  ["orbit.notes","little reminder to look up tonight 🌙","photo-1470252649378-9c29740c9fa8",1],
-  ["mossy.jpg","walked until my playlist ended 🌿","photo-1441974231531-c6227db76b6e",5],
-  ["cloud.zip","desktop finally looks less chaotic","photo-1498050108023-c5249f4df085",2],
-  ["afterglow.fm","currently replaying this track on loop 🎧","photo-1516280440614-37939bbacd81",1],
-  ["daybreak.jpg","breakfast tastes better outside ☀️","photo-1490645935967-10de6ba17061",4],
-  ["bluehour.png","this colour palette though 💙","photo-1500530855697-b586d89ba3ee",3],
-  ["softstatic","nothing deep, just a nice day","photo-1501785888041-af3ef285b470",6]
- ];
- samples.forEach(([u,cap,img,days],i)=>{
-  const id="demo-post-"+i;
-  if(!S.posts.some(p=>p.id===id))S.posts.push({id,u,cap,type:"image",src:"https://images.unsplash.com/"+img+"?auto=format&fit=crop&w=1200&q=85",ts:now-(days*86400000)-i*230000});
-  S.likes[id]=S.likes[id]||Array.from({length:[137,284,96,421,73,318,205][i]},(_,j)=>"demo_like_"+i+"_"+j);
-  S.cm[id]=S.cm[id]||(
-   i===0?[{u:"kai.frames",t:"this light is unreal ✨"},{u:"luna.jpg",t:"need to go here"}]:
-   i===1?[{u:"mira.jpg",t:"you always find the best spots"}]:
-   i===2?[{u:"sora.wav",t:"my kind of morning"}]:
-   i===3?[{u:"mira.jpg",t:"so pretty!! 💗"},{u:"noah.afterhours",t:"🌸🌸"}]:
-   i===4?[{u:"kai.frames",t:"clean setup 🔥"}]:
-   i===5?[{u:"luna.jpg",t:"the colors!!"}]:[{u:"pixel.park",t:"needed this today"}]
-  );
- });
- S.demoSeed=2;save();
+ const demoUsers=["mira.jpg","kai.frames","noah.afterhours","luna.jpg","pixel.park","sora.wav","amber.days","juniper.mp3","orbit.notes","mossy.jpg","cloud.zip","afterglow.fm","daybreak.jpg","bluehour.png","softstatic"];
+ const demoPostIds=S.posts.filter(p=>String(p.id||"").startsWith("demo-post-")).map(p=>p.id);
+ S.posts=S.posts.filter(p=>!demoPostIds.includes(p.id));
+ demoPostIds.forEach(id=>{delete S.likes[id];delete S.cm[id];delete S.rep[id];});
+ demoUsers.forEach(u=>{if(u!==S.me)delete S.acc[u];delete S.fol[u];});
+ const u="fai.reconstruction";
+ const a=A(u);a.bio="FAI · AI reconstruction, not the real person";a.av="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=240&h=240&fit=crop&crop=faces";a.fl=0;a.fg=0;
+ S.demoSeed=3;save();
 }
-seedDemoCommunity();
 
 function card(p,full){const L=S.likes[p.id]||[],C=S.cm[p.id]||[],R=S.rep[p.id]||[],mine=p.u==S.me;
 return `<article class="pc"><div class="bx"><div class="ph"><span class="rg ${posts(p.u).length?"":"no"}" style="padding:2px" data-a="story" data-id="${p.u}">${av(p.u,36)}</span><div><b data-a="user" data-id="${p.u}">${esc(p.u)}</b> <span style="color:var(--m)">• ${ago(p.ts)}</span><small>${p.type=="video"?"Original video":"Photo"}</small></div><div class="r">${mine?"":`<button class="fb ${fol(S.me).includes(p.u)?"on":""}" data-a="fol" data-id="${p.u}">${fol(S.me).includes(p.u)?"Following":"Follow"}</button>`}<button data-a="pm" data-id="${p.id}">${ic("dots")}</button></div></div>
