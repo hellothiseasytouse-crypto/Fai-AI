@@ -114,11 +114,51 @@ const posts=u=>S.posts.filter(p=>p.u==u),fol=u=>S.fol[u]||[],has=(o,k)=>(o[k]||[
 const followers=u=>(+A(u).fl||0)+Object.keys(S.fol).filter(k=>S.fol[k].includes(u)).length,following=u=>(+A(u).fg||0)+fol(u).length;
 const fmt=n=>n>=1e4?(n/1e3).toFixed(n<1e5?1:0).replace(".0","")+"K":String(n);
 const ago=t=>{const s=(Date.now()-t)/1e3;return s<60?"now":s<3600?(s/60|0)+"m":s<86400?(s/3600|0)+"h":s<604800?(s/86400|0)+"d":(s/604800|0)+"w"};
-const av=(u,z=44)=>{const a=S.acc[u],src=a&&a.av&&MU[a.av];return `<div class="av" style="width:${z}px;height:${z}px;${src?`background-image:url('${src}')`:""}"></div>`};
-const media=(p,pl=1)=>{const s=MU[p.mid];if(!s)return `<div style="padding:60px;color:var(--m);text-align:center">Media unavailable in this browser</div>`;return p.type=="video"?`<video src="${s}" ${pl?'class="pl"':"preload='metadata'"} muted loop playsinline></video>`:`<img src="${s}" alt="">`};
+const av=(u,z=44)=>{const a=S.acc[u],src=a&&a.av&&(MU[a.av]||(/^https?:\\/\\//.test(a.av)?a.av:""));return `<div class="av" style="width:${z}px;height:${z}px;${src?`background-image:url('${src}')`:""}"></div>`};
+const media=(p,pl=1)=>{const s=(p.src&&/^https?:\\/\\//.test(p.src))?p.src:MU[p.mid];if(!s)return `<div style="padding:60px;color:var(--m);text-align:center">Media unavailable in this browser</div>`;return p.type=="video"?`<video src="${s}" ${pl?'class="pl"':"preload='metadata'"} muted loop playsinline></video>`:`<img src="${s}" alt="">`};
 const empty=(t,d,b="",i="cam")=>`<div class="em"><div class="ci2">${ic(i)}</div><b>${t}</b>${d}<br><br>${b}</div>`;
 const note=(to,t,pid)=>{if(to!=S.me)S.notifs.unshift({t,a:S.me,to,pid,ts:Date.now()})};
 const tag=s=>esc(s).replace(/#(\w+)/g,'<span class="tg">#$1</span>');
+
+
+// Starter demo community: fictional accounts, posts, profile photos and engagement.
+function seedDemoCommunity(){
+ if(S.demoSeed)return;
+ const people=[
+  ["mira.jpg","Mira Sol","little moments, big skies ☁️", "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=240&h=240&fit=crop&crop=faces",824,391],
+  ["kai.frames","Kai Frames","street photos + late night walks 📷","https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=240&h=240&fit=crop&crop=faces",1250,602],
+  ["noah.afterhours","Noah","coffee, music, repeat.","https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=240&h=240&fit=crop&crop=faces",562,430],
+  ["luna.jpg","luna","collecting tiny happy things 🌷","https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=240&h=240&fit=crop&crop=faces",2100,714],
+  ["pixel.park","Pixel Park","games • design • random thoughts","https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=240&h=240&fit=crop&crop=faces",947,288],
+  ["sora.wav","sora","somewhere between songs 🎧","https://images.unsplash.com/photo-1517841905240-472988babdf9?w=240&h=240&fit=crop&crop=faces",1730,821]
+ ];
+ people.forEach(([u,bio,unused,photo,fl,fg])=>{const a=A(u);a.bio=bio;a.av=photo;a.fl=fl;a.fg=fg;});
+ const now=Date.now();
+ const samples=[
+  ["mira.jpg","golden hour never misses 🌅 #evening #littlethings","photo-1470252649378-9c29740c9fa8",4],
+  ["kai.frames","found a quiet street and stayed way too long. #streetphotography","photo-1519608487953-e999c86e7455",3],
+  ["noah.afterhours","coffee first. decisions later ☕","photo-1495474472287-4d71bcdd2085",2],
+  ["luna.jpg","a little color for your feed 🌸 #weekend","photo-1490750967868-88aa4486c946",1],
+  ["pixel.park","setup is finally clean. now to actually finish the project 🎮","photo-1498050108023-c5249f4df085",0],
+  ["sora.wav","this sky feels like the last scene of a movie 🌊","photo-1500375592092-40eb2168fd21",5],
+  ["mira.jpg","tiny reminder: you don't have to have it all figured out.","photo-1500530855697-b586d89ba3ee",6]
+ ];
+ samples.forEach(([u,cap,img,days],i)=>{
+  const id="demo-post-"+i;
+  if(!S.posts.some(p=>p.id===id))S.posts.push({id,u,cap,type:"image",src:"https://images.unsplash.com/"+img+"?auto=format&fit=crop&w=1200&q=85",ts:now-(days*86400000)-i*230000});
+  S.likes[id]=S.likes[id]||Array.from({length:[137,284,96,421,73,318,205][i]},(_,j)=>"demo_like_"+i+"_"+j);
+  S.cm[id]=S.cm[id]||(
+   i===0?[{u:"kai.frames",t:"this light is unreal ✨"},{u:"luna.jpg",t:"need to go here"}]:
+   i===1?[{u:"mira.jpg",t:"you always find the best spots"}]:
+   i===2?[{u:"sora.wav",t:"my kind of morning"}]:
+   i===3?[{u:"mira.jpg",t:"so pretty!! 💗"},{u:"noah.afterhours",t:"🌸🌸"}]:
+   i===4?[{u:"kai.frames",t:"clean setup 🔥"}]:
+   i===5?[{u:"luna.jpg",t:"the colors!!"}]:[{u:"pixel.park",t:"needed this today"}]
+  );
+ });
+ S.demoSeed=1;save();
+}
+seedDemoCommunity();
 
 function card(p,full){const L=S.likes[p.id]||[],C=S.cm[p.id]||[],R=S.rep[p.id]||[],mine=p.u==S.me;
 return `<article class="pc"><div class="bx"><div class="ph"><span class="rg ${posts(p.u).length?"":"no"}" style="padding:2px" data-a="story" data-id="${p.u}">${av(p.u,36)}</span><div><b data-a="user" data-id="${p.u}">${esc(p.u)}</b> <span style="color:var(--m)">• ${ago(p.ts)}</span><small>${p.type=="video"?"Original video":"Photo"}</small></div><div class="r">${mine?"":`<button class="fb ${fol(S.me).includes(p.u)?"on":""}" data-a="fol" data-id="${p.u}">${fol(S.me).includes(p.u)?"Following":"Follow"}</button>`}<button data-a="pm" data-id="${p.id}">${ic("dots")}</button></div></div>
