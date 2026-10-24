@@ -114,8 +114,8 @@ const posts=u=>S.posts.filter(p=>p.u==u),fol=u=>S.fol[u]||[],has=(o,k)=>(o[k]||[
 const followers=u=>(+A(u).fl||0)+Object.keys(S.fol).filter(k=>S.fol[k].includes(u)).length,following=u=>(+A(u).fg||0)+fol(u).length;
 const fmt=n=>n>=1e4?(n/1e3).toFixed(n<1e5?1:0).replace(".0","")+"K":String(n);
 const ago=t=>{const s=(Date.now()-t)/1e3;return s<60?"now":s<3600?(s/60|0)+"m":s<86400?(s/3600|0)+"h":s<604800?(s/86400|0)+"d":(s/604800|0)+"w"};
-const av=(u,z=44)=>{const a=S.acc[u],src=a&&a.av&&(MU[a.av]||(/^https?:\\/\\//.test(a.av)?a.av:""));return `<div class="av" style="width:${z}px;height:${z}px;${src?`background-image:url('${src}')`:""}"></div>`};
-const media=(p,pl=1)=>{const s=(p.src&&/^https?:\\/\\//.test(p.src))?p.src:MU[p.mid];if(!s)return `<div style="padding:60px;color:var(--m);text-align:center">Media unavailable in this browser</div>`;return p.type=="video"?`<video src="${s}" ${pl?'class="pl"':"preload='metadata'"} muted loop playsinline></video>`:`<img src="${s}" alt="">`};
+const av=(u,z=44)=>{const a=S.acc[u],src=a&&a.av&&(MU[a.av]||(/^https?:\/\//.test(a.av)?a.av:""));return `<div class="av" style="width:${z}px;height:${z}px;${src?`background-image:url('${src}')`:""}"></div>`};
+const media=(p,pl=1)=>{const s=(p.src&&/^https?:\/\//.test(p.src))?p.src:MU[p.mid];if(!s)return `<div style="padding:60px;color:var(--m);text-align:center">Media unavailable in this browser</div>`;return p.type=="video"?`<video src="${s}" ${pl?'class="pl"':"preload='metadata'"} muted loop playsinline></video>`:`<img src="${s}" alt="">`};
 const empty=(t,d,b="",i="cam")=>`<div class="em"><div class="ci2">${ic(i)}</div><b>${t}</b>${d}<br><br>${b}</div>`;
 const note=(to,t,pid)=>{if(to!=S.me)S.notifs.unshift({t,a:S.me,to,pid,ts:Date.now()})};
 const tag=s=>esc(s).replace(/#(\w+)/g,'<span class="tg">#$1</span>');
