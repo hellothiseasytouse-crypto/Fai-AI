@@ -1,0 +1,24 @@
+{
+  "project": "Dying Ember",
+  "purpose": "Preserve source material separately from interpretations.",
+  "records": [
+    {
+      "id": "replace-with-unique-id",
+      "platform": "discord-or-instagram",
+      "identity": "Yeagrist-or-FAI",
+      "timestamp": null,
+      "raw_text": "Paste the original message exactly as written.",
+      "context": "What was happening around this message?",
+      "source_reference": "Optional archive filename or message link",
+      "confidence_in_context": "unknown",
+      "notes": "Do not add inferred personality traits to raw_text."
+    }
+  ],
+  "rules": [
+    "Keep original wording and context intact.",
+    "Label interpretation separately from direct evidence.",
+    "Do not fabricate messages, memories, feelings, or traits.",
+    "Keep contradictions and uncertainty visible.",
+    "Remove private information that is not needed for the reconstruction."
+  ]
+}
