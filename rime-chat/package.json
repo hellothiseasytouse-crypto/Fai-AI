@@ -1,0 +1,10 @@
+{
+  "name": "rime-chat",
+  "version": "1.0.0",
+  "description": "Dark minimal chat site for an original AI gamer character.",
+  "main": "server.js",
+  "scripts": {"start":"node server.js","dev":"node --watch server.js","test":"node --test"},
+  "engines": {"node": ">=20.12"},
+  "dependencies": {"express":"^4.21.2"},
+  "license":"MIT"
+}
